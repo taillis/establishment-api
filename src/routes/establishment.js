@@ -1,6 +1,6 @@
 const routes = require("express").Router();
-const establishmentController = require("../app/controllers/establishment");
-const { authorize } = require("../app/middlewares/index");
+const establishmentController = require("../controllers/establishment");
+const { authorize } = require("../middlewares/index");
 
 routes.post("/register", establishmentController.new);
 
