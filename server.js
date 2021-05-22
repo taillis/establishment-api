@@ -3,6 +3,8 @@ const app = express();
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
+const cors = require("cors");
 dotenv.config();
 
 const routes = require("./src/routes");
@@ -14,6 +16,8 @@ mongoose.connect(
 );
 
 const port = process.env.PORT || 3000;
+app.use(cors());
+app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/", routes);
