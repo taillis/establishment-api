@@ -17,10 +17,10 @@ const auth = async (req, res, next) => {
 
     if (!decoded) {
       res
-        .status(400)
+        .status(401)
         .send({
           error: true,
-          status: 400,
+          status: 401,
           message: "Invalid token",
         })
         .end();
@@ -30,10 +30,10 @@ const auth = async (req, res, next) => {
 
     if (!establishment || establishment.error)
       res
-        .status(400)
+        .status(404)
         .send({
           error: true,
-          status: 400,
+          status: 404,
           message:
             (establishment && establishment.error) ||
             "Establishment not found, please, register it!",

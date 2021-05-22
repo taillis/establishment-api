@@ -1,4 +1,5 @@
 const Joi = require("@hapi/joi");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const establishmentRepository = require("../../repositories/establishment");
@@ -7,6 +8,7 @@ const schema = Joi.object({
   name: Joi.string().min(6).required(),
   email: Joi.string().min(6).required().email(),
   password: Joi.string().min(6).required(),
+  passwordConfirm: Joi.string().min(6).valid(Joi.ref("password")).required(),
   location: Joi.object()
     .keys({
       latitude: Joi.number().required(),
@@ -40,7 +42,7 @@ module.exports = asyncHandler(async (req, res) => {
   const hashPassword = await bcrypt.hash(req.body.password, salt);
 
   try {
-    const estasblishment = await establishmentRepository.create({
+    const establishment = await establishmentRepository.create({
       name: req.body.name,
       email: req.body.email,
       password: hashPassword,
@@ -50,7 +52,21 @@ module.exports = asyncHandler(async (req, res) => {
       },
     });
 
-    res.send(estasblishment);
+    console.log({ establishment });
+
+    const token = jwt.sign(
+      {
+        _id: establishment._id,
+      },
+      process.env.JWT_TOKEN
+    );
+
+    establishment.token = token;
+
+    res.status(200).send({
+      token: token,
+      ...establishment,
+    });
   } catch (error) {
     res.status(400).send({
       error: true,
