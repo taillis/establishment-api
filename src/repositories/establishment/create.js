@@ -1,10 +1,10 @@
-const Estasblishment = require("../../models/establishment");
+const Establishment = require("../../models/establishment");
 
 module.exports = async (establishment) => {
   try {
-    const estasblishment = new Estasblishment(establishment);
+    const savedEstablishment = new Establishment(establishment);
 
-    return await estasblishment.save();
+    return await savedEstablishment.save();
   } catch (error) {
     return error;
   }

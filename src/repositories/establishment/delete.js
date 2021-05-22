@@ -1,8 +1,8 @@
-const Estasblishment = require("../../models/establishment");
+const Establishment = require("../../models/establishment");
 
 module.exports = async (_id) => {
   try {
-    return await Estasblishment.deleteOne({ _id });
+    return await Establishment.deleteOne({ _id });
   } catch (error) {
     return error;
   }

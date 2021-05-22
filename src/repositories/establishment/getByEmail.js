@@ -1,8 +1,8 @@
-const Estasblishment = require("../../models/establishment");
+const Establishment = require("../../models/establishment");
 
 module.exports = async (email) => {
   try {
-    return await Estasblishment.findOne({
+    return await Establishment.findOne({
       email: email,
     });
   } catch (error) {
