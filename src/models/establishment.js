@@ -6,6 +6,10 @@ const EstablishmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    searchName: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,

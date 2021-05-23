@@ -1,11 +1,28 @@
 const asyncHandler = require("express-async-handler");
-const Establishment = require("../../models/establishment");
+const establishmentRepository = require("../../repositories/establishment");
+const establishmentConstants = require("../../constants/establishment");
 
 module.exports = asyncHandler(async (req, res) => {
-  let establishment = [];
   try {
-    establishment = await Establishment.find();
-  } catch (error) {}
+    console.log(req.query);
+    const lng = req.query.lng || establishmentConstants.defaultLatLng.lng;
+    const lat = req.query.lat || establishmentConstants.defaultLatLng.lat;
+    const distance =
+      req.query.distance || establishmentConstants.defaultDistance;
+    const name = req.query.name || "";
 
-  res.send(establishment);
+    console.log(distance * 1000);
+
+    const establishment = await establishmentRepository.getNear(
+      parseFloat(lng),
+      parseFloat(lat),
+      name.toLowerCase(),
+      parseInt(distance * 1000)
+    );
+
+    res.send(establishment);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
 });

@@ -45,6 +45,7 @@ module.exports = asyncHandler(async (req, res) => {
   try {
     const establishment = await establishmentRepository.create({
       name: req.body.name,
+      searchName: req.body.name.toLowerCase(),
       email: req.body.email,
       password: hashPassword,
       location: {
@@ -61,12 +62,13 @@ module.exports = asyncHandler(async (req, res) => {
     );
 
     establishment.token = token;
-
+    console.log(establishment);
     res.status(200).send({
       token: token,
       ...sanitizeEstablishment(establishment),
     });
   } catch (error) {
+    console.log(error);
     res.status(400).send({
       error: true,
       status: 400,
