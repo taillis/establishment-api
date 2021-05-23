@@ -2,6 +2,7 @@ const Joi = require("@hapi/joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const establishmentRepository = require("../../repositories/establishment");
+const sanitizeEstablishment = require("../../helpers/sanitizeEstablishment");
 
 const schema = Joi.object({
   email: Joi.string().min(6).required().email(),
@@ -19,7 +20,9 @@ module.exports = async (req, res) => {
     });
   }
 
-  const establishment = await establishmentRepository.getByEmail(req.body.email);
+  const establishment = await establishmentRepository.getByEmail(
+    req.body.email
+  );
 
   if (!establishment) {
     return res.status(404).send({
@@ -57,6 +60,6 @@ module.exports = async (req, res) => {
       error: false,
       token: token,
       message: "Logged in",
-      ...establishment,
+      ...sanitizeEstablishment(establishment),
     });
 };

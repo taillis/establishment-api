@@ -1,10 +1,8 @@
 const Establishment = require("../../models/establishment");
 
-module.exports = async (email) => {
+module.exports = async (_id, data) => {
   try {
-    return await Establishment.findOne({
-      email: email,
-    });
+    return await Establishment.findByIdAndUpdate(_id, data);
   } catch (error) {
     return {
       error,

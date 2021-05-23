@@ -6,6 +6,8 @@ module.exports = async (establishment) => {
 
     return await savedEstablishment.save();
   } catch (error) {
-    return error;
+    return {
+      error,
+    };
   }
 };

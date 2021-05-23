@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const establishmentRepository = require("../../repositories/establishment");
+const sanitizeEstablishment = require("../../helpers/sanitizeEstablishment");
 
 const schema = Joi.object({
   name: Joi.string().min(6).required(),
@@ -52,8 +53,6 @@ module.exports = asyncHandler(async (req, res) => {
       },
     });
 
-    console.log({ establishment });
-
     const token = jwt.sign(
       {
         _id: establishment._id,
@@ -65,7 +64,7 @@ module.exports = asyncHandler(async (req, res) => {
 
     res.status(200).send({
       token: token,
-      ...establishment,
+      ...sanitizeEstablishment(establishment),
     });
   } catch (error) {
     res.status(400).send({
