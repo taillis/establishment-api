@@ -14,7 +14,7 @@ module.exports = async (long, lat, name, distance) => {
           spherical: true,
         },
       },
-      { $match: { searchName: new RegExp("^" + name) } },
+      { $match: { searchName: { $regex: new RegExp(name, "i") } } },
       { $project: { password: 0, __v: 0, searchName: 0 } },
     ]);
   } catch (error) {
