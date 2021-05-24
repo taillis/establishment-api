@@ -43,7 +43,10 @@ module.exports = asyncHandler(async (req, res) => {
       }
     );
 
-    res.status(200).send(sanitizeEstablishment(establishment));
+    res.status(200).send({
+      message: "Profile updated",
+      ...sanitizeEstablishment(establishment),
+    });
   } catch (error) {
     res.status(400).send({
       error: true,
