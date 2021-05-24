@@ -4,14 +4,11 @@ const establishmentConstants = require("../../constants/establishment");
 
 module.exports = asyncHandler(async (req, res) => {
   try {
-    console.log(req.query);
     const lng = req.query.lng || establishmentConstants.defaultLatLng.lng;
     const lat = req.query.lat || establishmentConstants.defaultLatLng.lat;
     const distance =
       req.query.distance || establishmentConstants.defaultDistance;
     const name = req.query.name || "";
-
-    console.log(distance * 1000);
 
     const establishment = await establishmentRepository.getNear(
       parseFloat(lng),
