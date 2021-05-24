@@ -11,7 +11,7 @@ const routes = require("./src/routes");
 
 mongoose.connect(
   process.env.DB_CONNECT,
-  { useNewUrlParser: true, useUnifiedTopology: true },
+  { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
   () => console.log("connected to db!")
 );
 

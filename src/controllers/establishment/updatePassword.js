@@ -4,6 +4,7 @@ const asyncHandler = require("express-async-handler");
 const establishmentRepository = require("../../repositories/establishment");
 const sanitizeEstablishment = require("../../helpers/sanitizeEstablishment");
 
+// Schema to validate request data
 const schema = Joi.object({
   currentPassword: Joi.string().min(6).required(),
   password: Joi.string().min(6).required(),
@@ -22,10 +23,12 @@ module.exports = asyncHandler(async (req, res) => {
   }
 
   try {
+    // Try to get establishment data from its repository
     const establishment = await establishmentRepository.getById(
       req.establishment._id
     );
 
+    // Verify if its current password is valid
     const validPassword = await bcrypt.compare(
       req.body.currentPassword,
       establishment.password
@@ -39,9 +42,11 @@ module.exports = asyncHandler(async (req, res) => {
       });
     }
 
+    // Generate salt and its new password
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt);
 
+    // Try to update establishment's password  data on its repository
     await establishmentRepository.update(req.establishment._id, {
       password: hashPassword,
     });

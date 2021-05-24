@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const establishmentRepository = require("../repositories/establishment");
 
+// Auth middleware to verify if user if logged based on its token
 const auth = async (req, res, next) => {
   const token = req.header("auth-token");
 
@@ -13,6 +14,7 @@ const auth = async (req, res, next) => {
   }
 
   try {
+    // Decode token to get its data
     const decoded = jwt.verify(token, process.env.JWT_TOKEN);
 
     if (!decoded) {
@@ -26,6 +28,7 @@ const auth = async (req, res, next) => {
         .end();
     }
 
+    // Find establishment using decoded data
     const establishment = await establishmentRepository.getById(decoded._id);
 
     if (!establishment || establishment.error)
@@ -40,6 +43,7 @@ const auth = async (req, res, next) => {
         })
         .end();
 
+    // Set establishment on request object to use it on all application
     req.establishment = establishment;
 
     next();

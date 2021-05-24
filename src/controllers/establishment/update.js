@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const establishmentRepository = require("../../repositories/establishment");
 const sanitizeEstablishment = require("../../helpers/sanitizeEstablishment");
 
+// Schema to validate request data to update establishment
 const schema = Joi.object({
   name: Joi.string().min(6).required(),
   email: Joi.string().min(6).required().email(),
@@ -26,6 +27,7 @@ module.exports = asyncHandler(async (req, res) => {
   }
 
   try {
+    // Try to update establishment data on its own repository
     const establishment = await establishmentRepository.update(
       req.establishment._id,
       {

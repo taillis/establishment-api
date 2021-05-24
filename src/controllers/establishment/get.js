@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const establishmentRepository = require("../../repositories/establishment");
 const sanitizeEstablishment = require("../../helpers/sanitizeEstablishment");
 
+// Method to get logged establishment's data
 module.exports = asyncHandler(async (req, res) => {
   try {
     const establishment = await establishmentRepository.getById(

@@ -28,6 +28,9 @@ const EstablishmentSchema = new mongoose.Schema(
   }
 );
 
+// Create an index to support geo location filtering
+EstablishmentSchema.index({ location: "2dsphere" });
+
 module.exports = mongoose.model(
   "Establishment",
   EstablishmentSchema,

@@ -5,6 +5,7 @@ const asyncHandler = require("express-async-handler");
 const establishmentRepository = require("../../repositories/establishment");
 const sanitizeEstablishment = require("../../helpers/sanitizeEstablishment");
 
+// Schema to validate request data
 const schema = Joi.object({
   name: Joi.string().min(6).required(),
   email: Joi.string().min(6).required().email(),
@@ -39,10 +40,12 @@ module.exports = asyncHandler(async (req, res) => {
     });
   }
 
+  // Generate salt and hashed password
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(req.body.password, salt);
 
   try {
+    // Try to persist establishment data on its own repository
     const establishment = await establishmentRepository.create({
       name: req.body.name,
       searchName: req.body.name.toLowerCase(),
@@ -54,6 +57,7 @@ module.exports = asyncHandler(async (req, res) => {
       },
     });
 
+    // Get JWT token to manage sessions
     const token = jwt.sign(
       {
         _id: establishment._id,
@@ -62,13 +66,12 @@ module.exports = asyncHandler(async (req, res) => {
     );
 
     establishment.token = token;
-    console.log(establishment);
+
     res.status(200).send({
       token: token,
       ...sanitizeEstablishment(establishment),
     });
   } catch (error) {
-    console.log(error);
     res.status(400).send({
       error: true,
       status: 400,

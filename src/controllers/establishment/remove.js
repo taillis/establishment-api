@@ -3,6 +3,7 @@ const establishmentRepository = require("../../repositories/establishment");
 
 module.exports = asyncHandler(async (req, res) => {
   try {
+    // Try to delete establishment data from its own repository
     const establishment = await establishmentRepository.delete(
       req.establishment._id
     );

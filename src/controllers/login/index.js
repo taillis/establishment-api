@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const establishmentRepository = require("../../repositories/establishment");
 const sanitizeEstablishment = require("../../helpers/sanitizeEstablishment");
 
+// Schema to validate login params
 const schema = Joi.object({
   email: Joi.string().min(6).required().email(),
   password: Joi.string().min(6).required(),
@@ -20,6 +21,7 @@ module.exports = async (req, res) => {
     });
   }
 
+  // Try to get establishment by email to check if it exists
   const establishment = await establishmentRepository.getByEmail(
     req.body.email
   );
@@ -32,6 +34,7 @@ module.exports = async (req, res) => {
     });
   }
 
+  // Verify password provided by user
   const validPassword = await bcrypt.compare(
     req.body.password,
     establishment.password
@@ -45,6 +48,7 @@ module.exports = async (req, res) => {
     });
   }
 
+  // Generate a token to manage session
   const token = jwt.sign(
     {
       _id: establishment._id,
